@@ -60,14 +60,20 @@ class Unit:
             return False
         return True
     
-    def attack_unit(self,target,new_damage):
-        target.calculate_damage_reduction()
-        if not self.can_attack_unit(target):
-            print(f"{self.name} can't attack {target.name}.")
-            return
-        self.total_damage = round((self.damage + new_damage) * self.dmgmult * (1 - target.damage_reduction))
-        target.health -= self.total_damage
-        print(f"{self.name} does {self.total_damage} damage, leaving {target.name} with {target.health} health.")
+    def attack_unit(self,target):
+        while self.is_alive() and target.is_alive():
+            time.sleep(self.attack_speed)
+            if not self.is_alive():
+                return
+            elif not target.is_alive():
+                return
+            new_damage = self.calculate_damage()
+            if not self.can_attack_unit(target):
+                print(f"{self.name} can't attack {target.name}.")
+                return
+            self.total_damage = round((self.damage + new_damage) * self.dmgmult * (1 - target.damage_reduction))
+            target.health -= self.total_damage
+            print(f"{self.name} does {self.total_damage} damage, leaving {target.name} with {target.health} health.")
 
     def is_alive(self):
         if self.health > 0:

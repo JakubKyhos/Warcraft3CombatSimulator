@@ -30,6 +30,7 @@ class Warior(Unit):
             print("Invalid input for armor upgrade. Choose from: None, basic, advanced, expert.")
             self.choose_upgrades()
             self.armor_update()
+            self.get_dice_rolls()
 
     def get_dice_rolls(self):
         if self.weapon_upgrade == "None":
@@ -43,4 +44,5 @@ class Warior(Unit):
         else:
             print("Invalid input for weapon upgrade. Choose from: None, basic, advanced, expert.")
             self.choose_upgrades()
+            self.armor_update()
             self.get_dice_rolls()

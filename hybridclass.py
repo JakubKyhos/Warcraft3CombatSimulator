@@ -11,3 +11,12 @@ class Hybrid(Warior):
         self.second_damage_type = second_damage_type
         self.second_attack_speed = second_attack_speed
         self.second_dice_sides = second_dice_sides
+
+    def enemy_is_air_unit(self, target):
+        if target.air_unit:
+            self.damage = self.second_damage
+            self.damage_type = self.second_damage_type
+            self.attack_speed = self.second_attack_speed
+            self.dice_sides = self.second_dice_sides
+            self.update_damage_multiplier(target)
+            self.calculate_damage_reduction()

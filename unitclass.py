@@ -3,7 +3,7 @@ import random
 
 class Unit:
     def __init__(self, name, health, damage, damage_type, armor, armor_type, attack_speed, dice_sides,
-                can_attack_ground=False, can_attack_air=False, air_unit=False):
+                unit_type, valid_targets):
 
         self.name = name
         self.health = health
@@ -13,14 +13,11 @@ class Unit:
         self.armor_type = armor_type
         self.attack_speed = attack_speed
         self.dice_sides = dice_sides
-        self.can_attack_ground = can_attack_ground
-        self.can_attack_air = can_attack_air
-        self.air_unit = air_unit
+        self.unit_type = unit_type
+        self.valid_targets = valid_targets
         self.dice_rolls = 1
-        self.dice_dmg = 0
         self.damage_reduction = 0.0
         self.dmgmult = 1.0
-        self.total_damage = 0
 
     def update_damage_multiplier(self, target):
         damage_multipliers = {("normal", "medium"): 1.5,
@@ -54,11 +51,10 @@ class Unit:
         self.damage_reduction = (self.armor * 0.06) / (1 + 0.06 * self.armor)
 
     def can_attack_unit(self, target):
-        if self.can_attack_ground == False and target.air_unit == False:
-            return False
-        elif self.can_attack_air == False and target.air_unit == True:
-            return False
-        return True
+        return target.unit_type in self.valid_targets
+    
+    def crit_chance(self):
+            return 1.0
     
     def attack_unit(self,target):
         while self.is_alive() and target.is_alive():
@@ -68,24 +64,35 @@ class Unit:
             elif not target.is_alive():
                 return
             new_damage = self.calculate_damage()
+            crit = self.crit_chance()
             if not self.can_attack_unit(target):
                 print(f"{self.name} can't attack {target.name}.")
                 return
-            self.total_damage = round((self.damage + new_damage) * self.dmgmult * (1 - target.damage_reduction))
-            target.health -= self.total_damage
-            print(f"{self.name} does {self.total_damage} damage, leaving {target.name} with {target.health} health.")
+            total_damage = round((self.damage + new_damage) * self.dmgmult * (1 - target.damage_reduction) * crit)
+            target.health -= total_damage
+            print(f"{self.name} does {total_damage} damage, leaving {target.name} with {target.health} health.")
 
     def is_alive(self):
-        if self.health > 0:
-            return True
-        return False
+        return self.health > 0
 
-    def fight(self,target):
-        while self.is_alive() and target.is_alive():
-            self.attack_unit(target,new_damage=self.calculate_damage())
-            if not target.is_alive():
-                print(f"{self.name} has won with {self.health} left.")
-            else:
-                target.attack_unit(self,new_damage=target.calculate_damage())
-                if not self.is_alive():
-                    print(f"{target.name} has won with {target.health} left.")
+class Kodo_Beast(Unit):
+    def __init__(self, name, health, damage, damage_type, armor, armor_type, attack_speed, dice_sides, unit_type, valid_targets):
+        super().__init__(name, health, damage, damage_type, armor, armor_type, attack_speed, dice_sides, unit_type, valid_targets)
+
+    def War_Drums_upgrade(self):
+        upgrade = input(f"Do you want War Drums upgrade for {self.name}? [y/n] --> ")
+
+        if upgrade == "y":
+            self.dmgmult += 0.2
+        elif upgrade == "n":
+            self.dmgmult += 0.1
+        else:
+            print("Invalid input for War Drums upgrade. Choose from: [y/n].")
+            self.War_Drums_upgrade()
+
+class Dire_Wolf(Unit):
+    def __init__(self, name, health, damage, damage_type, armor, armor_type, attack_speed, dice_sides, unit_type, valid_targets):
+        super().__init__(name, health, damage, damage_type, armor, armor_type, attack_speed, dice_sides, unit_type, valid_targets)
+
+    def crit_chance(self):
+        return 2.0 if random.random() < 0.2 else 1.0

@@ -78,7 +78,6 @@ class Dragonhawk_Rider(Warior):
 class Knight(Warior):
     def __init__(self, name, health, damage, damage_type, armor, armor_type, attack_speed, dice_rolls, dice_sides, unit_type, valid_targets):
         super().__init__(name, health, damage, damage_type, armor, armor_type, attack_speed, dice_rolls, dice_sides, unit_type, valid_targets)
-        self.Animal_War_Training_upgrade()
 
     def Sundering_Blades_upgarde(self, target):
         upgrade = input(f"Do you want Sundering Blade upgarde for {self.name}? [y/n] --> ")

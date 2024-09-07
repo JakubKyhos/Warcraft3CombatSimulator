@@ -69,8 +69,8 @@ class Mountain_Giant(Hybrid):
 
     def upgrades(self):
         self.armor_update()
-        self.get_dice_rolls()
         self.War_Club()
+        self.get_dice_rolls()
 
     def War_Club(self):
         upgrade = input(f"Do you want {self.name} to use War Club? [y/n] --> ")
@@ -79,6 +79,7 @@ class Mountain_Giant(Hybrid):
             self.damage = self.second_damage
             self.damage_type = self.second_damage_type
             self.attack_speed = self.second_attack_speed
+            self.dice_rolls = self.second_dice_rolls
             self.dice_sides = self.second_dice_sides
         elif upgrade == "n":
             return

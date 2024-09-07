@@ -1,18 +1,13 @@
 from unitclass import Unit
-import time
-import random
 
 class Mage(Unit):
-    def __init__(self, name, health, damage, damage_type, armor, armor_type, attack_speed, dice_sides, unit_type, valid_targets):
-        super().__init__(name, health, damage, damage_type, armor, armor_type, attack_speed, dice_sides, unit_type, valid_targets)
+    def __init__(self, name, health, damage, damage_type, armor, armor_type, attack_speed, dice_rolls, dice_sides, unit_type, valid_targets):
+        super().__init__(name, health, damage, damage_type, armor, armor_type, attack_speed, dice_rolls, dice_sides, unit_type, valid_targets)
         self.upgrade = ""
-        self.choose_upgrade()
-        self.has_upgrade()
 
-    def choose_upgrade(self):
+    def arcane_training(self):
         self.upgrade = input(f"choose upgrade for {self.name} from: "", adept, master --> ")
 
-    def has_upgrade(self):
         if self.upgrade == "":
             return
         elif self.upgrade == "adept":
@@ -21,14 +16,18 @@ class Mage(Unit):
             self.health += 80
         else:
             print("Invalid input for upgrade. Choose from: "", adept, master.")
-            self.choose_upgrade()
-            self.has_upgrade()
+            self.arcane_training()
+
+    def upgrades(self):
+        self.arcane_training()
 
 class SpiritWalker(Mage):
-    def __init__(self, name, health, damage, damage_type, armor, armor_type, attack_speed, dice_sides, unit_type, valid_targets):
-        super().__init__(name, health, damage, damage_type, armor, armor_type, attack_speed, dice_sides, unit_type, valid_targets)
+    def __init__(self, name, health, damage, damage_type, armor, armor_type, attack_speed, dice_rolls, dice_sides, unit_type, valid_targets):
+        super().__init__(name, health, damage, damage_type, armor, armor_type, attack_speed, dice_rolls, dice_sides, unit_type, valid_targets)
 
-    def has_upgrade(self):
+    def arcane_training(self):
+        self.upgrade = input(f"choose upgrade for {self.name} from: "", adept, master --> ")
+
         if self.upgrade == "":
             return
         elif self.upgrade == "adept":
@@ -37,14 +36,15 @@ class SpiritWalker(Mage):
             self.health += 120
         else:
             print("Invalid input for upgrade. Choose from: "", adept, master.")
-            self.choose_upgrade()
-            self.has_upgrade()
+            self.arcane_training()
 
 class DruidOfTheClaw(Mage):
-    def __init__(self, name, health, damage, damage_type, armor, armor_type, attack_speed, dice_sides, unit_type, valid_targets):
-        super().__init__(name, health, damage, damage_type, armor, armor_type, attack_speed, dice_sides, unit_type, valid_targets)
+    def __init__(self, name, health, damage, damage_type, armor, armor_type, attack_speed, dice_rolls, dice_sides, unit_type, valid_targets):
+        super().__init__(name, health, damage, damage_type, armor, armor_type, attack_speed, dice_rolls, dice_sides, unit_type, valid_targets)
 
-    def has_upgrade(self):
+    def arcane_training(self):
+        self.upgrade = input(f"choose upgrade for {self.name} from: "", adept, master --> ")
+
         if self.upgrade == "":
             return
         elif self.upgrade == "adept":
@@ -53,5 +53,4 @@ class DruidOfTheClaw(Mage):
             self.health += 150
         else:
             print("Invalid input for upgrade. Choose from: "", adept, master.")
-            self.choose_upgrade()
-            self.has_upgrade()
+            self.arcane_training()

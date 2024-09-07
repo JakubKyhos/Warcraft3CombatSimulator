@@ -1,17 +1,13 @@
 from unitclass import Unit
-import time
-import random
 
 class Warior(Unit):
-    def __init__(self, name, health, damage, damage_type, armor, armor_type, attack_speed, dice_sides, unit_type, valid_targets):
-        super().__init__(name, health, damage, damage_type, armor, armor_type, attack_speed, dice_sides, unit_type, valid_targets)
+    def __init__(self, name, health, damage, damage_type, armor, armor_type, attack_speed, dice_rolls, dice_sides, unit_type, valid_targets):
+        super().__init__(name, health, damage, damage_type, armor, armor_type, attack_speed, dice_rolls, dice_sides, unit_type, valid_targets)
         self.weapon_upgrade = ""
         self.armor_upgrade = ""
-        self.armor_update()
-        self.get_dice_rolls()
 
     def armor_update(self):
-        self.weapon_upgrade = input(f"choose weapon upgrade for {self.name} from: "", basic, advanced, expert --> ")
+        self.armor_upgrade = input(f"choose armor upgrade for {self.name} from: "", basic, advanced, expert --> ")
 
         if self.armor_upgrade == "":
             return
@@ -26,7 +22,7 @@ class Warior(Unit):
             self.armor_update()
 
     def get_dice_rolls(self):
-        self.armor_upgrade = input(f"choose armor upgrade for {self.name} from: "", basic, advanced, expert --> ")
+        self.weapon_upgrade = input(f"choose weapon upgrade for {self.name} from: "", basic, advanced, expert --> ")
 
         if self.weapon_upgrade == "":
             return
@@ -40,26 +36,6 @@ class Warior(Unit):
             print("Invalid input for weapon upgrade. Choose from: "", basic, advanced, expert.")
             self.get_dice_rolls()
 
-class Mortar_team(Warior):
-    def __init__(self, name, health, damage, damage_type, armor, armor_type, attack_speed, dice_sides, unit_type, valid_targets):
-        super().__init__(name, health, damage, damage_type, armor, armor_type, attack_speed, dice_sides, unit_type, valid_targets)
-
-    def Fragmentation_Shards_upgrade(self,target):
-        upgrade = input(f"Do you want Fragmentation Shards upgrade for {self.name}? [y/n] --> ")
-
-        if upgrade == "y" and (target.armor_type == "unarmored" or target.armor_type == "medium"):
-            self.damage += 25               # I have no clue how this upgrade works exactly because when I test it in game, it does not seem to make any difference.
-        elif upgrade == "n" or target.armor_type != "unarmored" or target.armor_type != "medium":
-            return
-        else:
-            print("Invalid input for Fragmentation Shards upgrade. Choose from: [y/n].")
-            self.Fragmentation_Shards_upgrade(target)
-
-class Dragonhawk_Rider(Warior):
-    def __init__(self, name, health, damage, damage_type, armor, armor_type, attack_speed, dice_sides, unit_type, valid_targets):
-        super().__init__(name, health, damage, damage_type, armor, armor_type, attack_speed, dice_sides, unit_type, valid_targets)
-        self.Animal_War_Training_upgrade()
-
     def Animal_War_Training_upgrade(self):
         upgrade = input(f"Do you want Animal War Training upgrade for {self.name}? [y/n] --> ")
 
@@ -71,9 +47,38 @@ class Dragonhawk_Rider(Warior):
             print("Invalid input for Animal War Training upgrade. Choose from: [y/n].")
             self.Animal_War_Training_upgrade()
 
-class Knight(Dragonhawk_Rider):
-    def __init__(self, name, health, damage, damage_type, armor, armor_type, attack_speed, dice_sides, unit_type, valid_targets):
-        super().__init__(name, health, damage, damage_type, armor, armor_type, attack_speed, dice_sides, unit_type, valid_targets)
+    def upgrades(self):
+        self.armor_update()
+        self.get_dice_rolls()
+
+class Mortar_team(Warior):
+    def __init__(self, name, health, damage, damage_type, armor, armor_type, attack_speed, dice_rolls, dice_sides, unit_type, valid_targets):
+        super().__init__(name, health, damage, damage_type, armor, armor_type, attack_speed, dice_rolls, dice_sides, unit_type, valid_targets)
+
+    def Fragmentation_Shards_upgrade(self,target):          # I have no clue how this upgrade works exactly because when I test it in game, it does not seem to make any difference.
+        upgrade = input(f"Do you want Fragmentation Shards upgrade for {self.name}? [y/n] --> ")
+
+        if upgrade == "y" and (target.armor_type == "unarmored" or target.armor_type == "medium"):
+            self.damage += 25
+        elif upgrade == "n" or target.armor_type != "unarmored" or target.armor_type != "medium":
+            return
+        else:
+            print("Invalid input for Fragmentation Shards upgrade. Choose from: [y/n].")
+            self.Fragmentation_Shards_upgrade(target)
+
+class Dragonhawk_Rider(Warior):
+    def __init__(self, name, health, damage, damage_type, armor, armor_type, attack_speed, dice_rolls, dice_sides, unit_type, valid_targets):
+        super().__init__(name, health, damage, damage_type, armor, armor_type, attack_speed, dice_rolls, dice_sides, unit_type, valid_targets)
+
+    def upgrades(self):
+        self.armor_update()
+        self.get_dice_rolls()
+        self.Animal_War_Training_upgrade()
+
+class Knight(Warior):
+    def __init__(self, name, health, damage, damage_type, armor, armor_type, attack_speed, dice_rolls, dice_sides, unit_type, valid_targets):
+        super().__init__(name, health, damage, damage_type, armor, armor_type, attack_speed, dice_rolls, dice_sides, unit_type, valid_targets)
+        self.Animal_War_Training_upgrade()
 
     def Sundering_Blades_upgarde(self, target):
         upgrade = input(f"Do you want Sundering Blade upgarde for {self.name}? [y/n] --> ")
@@ -86,10 +91,14 @@ class Knight(Dragonhawk_Rider):
             print("Invalid input for Animal War Training upgrade. Choose from: [y/n].")
             self.Sundering_Blades_upgarde(target)
 
+    def upgrades(self):
+        self.armor_update()
+        self.get_dice_rolls()
+        self.Animal_War_Training_upgrade()
+
 class Grunt(Warior):
-    def __init__(self, name, health, damage, damage_type, armor, armor_type, attack_speed, dice_sides, unit_type, valid_targets):
-        super().__init__(name, health, damage, damage_type, armor, armor_type, attack_speed, dice_sides, unit_type, valid_targets)
-        self.Brute_Strength_upgrade()
+    def __init__(self, name, health, damage, damage_type, armor, armor_type, attack_speed, dice_rolls, dice_sides, unit_type, valid_targets):
+        super().__init__(name, health, damage, damage_type, armor, armor_type, attack_speed, dice_rolls, dice_sides, unit_type, valid_targets)
 
     def Brute_Strength_upgrade(self):
         upgrade = input(f"Do you want Brute Strength upgrade for {self.name}? [y/n] --> ")
@@ -102,3 +111,48 @@ class Grunt(Warior):
         else:
             print("Invalid input for Brute Strength upgrade. Choose from: [y/n].")
             self.Brute_Strength_upgrade()
+
+    def upgrades(self):
+        self.armor_update()
+        self.get_dice_rolls()
+        self.Brute_Strength_upgrade()
+
+class Archer(Warior):
+    def __init__(self, name, health, damage, damage_type, armor, armor_type, attack_speed, dice_rolls, dice_sides, unit_type, valid_targets):
+        super().__init__(name, health, damage, damage_type, armor, armor_type, attack_speed, dice_rolls, dice_sides, unit_type, valid_targets)
+
+    def Marksmanship_upgrade(self):
+        upgrade = input(f"Do you want Marksmanship upgrade for {self.name}? [y/n] --> ")
+
+        if upgrade == "y":
+            self.damage += 4
+        elif upgrade == "n":
+            return
+        else:
+            print("Invalid input for Marksmanship upgrade. Choose from: [y/n].")
+            self.Marksmanship_upgrade()
+
+    def upgrades(self):
+        self.armor_update()
+        self.get_dice_rolls()
+        self.Marksmanship_upgrade()
+
+class Ghoul(Warior):
+    def __init__(self, name, health, damage, damage_type, armor, armor_type, attack_speed, dice_rolls, dice_sides, unit_type, valid_targets):
+        super().__init__(name, health, damage, damage_type, armor, armor_type, attack_speed, dice_rolls, dice_sides, unit_type, valid_targets)
+
+    def Ghoul_Frenzy_upgrade(self):
+        upgrade = input(f"Do you want Ghoul Frenzy upgrade for {self.name}? [y/n] --> ")
+
+        if upgrade == "y":
+            self.attack_speed = 0.96
+        elif upgrade == "n":
+            return
+        else:
+            print("Invalid input for Ghoul Frenzy upgrade. Choose from: [y/n].")
+            self.Ghoul_Frenzy_upgrade()
+
+    def upgrades(self):
+        self.armor_update()
+        self.get_dice_rolls()
+        self.Ghoul_Frenzy_upgrade()

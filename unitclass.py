@@ -2,7 +2,7 @@ import time
 import random
 
 class Unit:
-    def __init__(self, name, health, damage, damage_type, armor, armor_type, attack_speed, dice_sides,
+    def __init__(self, name, health, damage, damage_type, armor, armor_type, attack_speed, dice_rolls, dice_sides,
                 unit_type, valid_targets):
 
         self.name = name
@@ -15,7 +15,7 @@ class Unit:
         self.dice_sides = dice_sides
         self.unit_type = unit_type
         self.valid_targets = valid_targets
-        self.dice_rolls = 1
+        self.dice_rolls = dice_rolls
         self.damage_reduction = 0.0
         self.dmgmult = 1.0
 
@@ -56,6 +56,12 @@ class Unit:
     def crit_chance(self):
             return 1.0
     
+    def Hardened_Skin(self, total_damage):
+        return total_damage
+
+    def upgrades(self):
+        pass
+    
     def attack_unit(self,target):
         while self.is_alive() and target.is_alive():
             time.sleep(self.attack_speed)
@@ -69,15 +75,16 @@ class Unit:
                 print(f"{self.name} can't attack {target.name}.")
                 return
             total_damage = round((self.damage + new_damage) * self.dmgmult * (1 - target.damage_reduction) * crit)
-            target.health -= total_damage
-            print(f"{self.name} does {total_damage} damage, leaving {target.name} with {target.health} health.")
+            final_damage = target.Hardened_Skin(total_damage)
+            target.health -= final_damage
+            print(f"{self.name} does {final_damage} damage, leaving {target.name} with {target.health} health.")
 
     def is_alive(self):
         return self.health > 0
 
 class Kodo_Beast(Unit):
-    def __init__(self, name, health, damage, damage_type, armor, armor_type, attack_speed, dice_sides, unit_type, valid_targets):
-        super().__init__(name, health, damage, damage_type, armor, armor_type, attack_speed, dice_sides, unit_type, valid_targets)
+    def __init__(self, name, health, damage, damage_type, armor, armor_type, attack_speed, dice_rolls, dice_sides, unit_type, valid_targets):
+        super().__init__(name, health, damage, damage_type, armor, armor_type, attack_speed, dice_rolls, dice_sides, unit_type, valid_targets)
 
     def War_Drums_upgrade(self):
         upgrade = input(f"Do you want War Drums upgrade for {self.name}? [y/n] --> ")
@@ -91,8 +98,26 @@ class Kodo_Beast(Unit):
             self.War_Drums_upgrade()
 
 class Dire_Wolf(Unit):
-    def __init__(self, name, health, damage, damage_type, armor, armor_type, attack_speed, dice_sides, unit_type, valid_targets):
-        super().__init__(name, health, damage, damage_type, armor, armor_type, attack_speed, dice_sides, unit_type, valid_targets)
+    def __init__(self, name, health, damage, damage_type, armor, armor_type, attack_speed, dice_rolls, dice_sides, unit_type, valid_targets):
+        super().__init__(name, health, damage, damage_type, armor, armor_type, attack_speed, dice_rolls, dice_sides, unit_type, valid_targets)
 
     def crit_chance(self):
         return 2.0 if random.random() < 0.2 else 1.0
+    
+class Treant(Unit):
+    def __init__(self, name, health, damage, damage_type, armor, armor_type, attack_speed, dice_rolls, dice_sides, unit_type, valid_targets):
+        super().__init__(name, health, damage, damage_type, armor, armor_type, attack_speed, dice_rolls, dice_sides, unit_type, valid_targets)
+
+    def Natures_Blessing_upgrade(self):
+        upgrade = input(f"Do you want Natures Blessing upgrade for {self.name}? [y/n] --> ")
+
+        if upgrade == "y":
+            self.armor += 5
+        elif upgrade == "n":
+            return
+        else:
+            print("Invalid input for Natures Blessing upgrade. Choose from: [y/n].")
+            self.Natures_Blessing_upgrade()
+
+    def upgrades(self):
+        self.Natures_Blessing_upgrade()

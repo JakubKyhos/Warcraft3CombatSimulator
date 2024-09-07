@@ -1,46 +1,83 @@
 import threading
-from unitclass import Unit, Kodo_Beast, Dire_Wolf
-from hybridclass import Hybrid, Flying_Machine
-from wariorclass import Warior, Mortar_team, Dragonhawk_Rider, Knight
-from siegeclass import Siege
-from mageclass import Mage, SpiritWalker, DruidOfTheClaw
+from unitclass import Kodo_Beast
+from hybridclass import Hybrid
+from wariorclass import Mortar_team, Knight
+from unitsdatabase import units
+
 
 def main():
-    test = Dire_Wolf("Dire Wolf",100,5,"normal",0,"unarmored",1.5,4,"range",["air","range","melee"])
-    test2 = Flying_Machine("Flying machine",100,5,10,"normal","piercing",0,"heavy",1,1.5,4,8,"air",["air"])
-    if isinstance(test,Hybrid):
-        test.enemy_is_air_unit(test2)
-    if isinstance(test2,Hybrid):
-        test2.enemy_is_air_unit(test)
-    if isinstance(test,Mortar_team):
-        test.Fragmentation_Shards_upgrade(test2)
-    if isinstance(test2,Mortar_team):
-        test2.Fragmentation_Shards_upgrade(test)
-    test.update_damage_multiplier(test2)
-    test2.update_damage_multiplier(test)
-    if isinstance(test,Knight):
-        test.Sundering_Blades_upgarde(test2)
-    if isinstance(test2,Knight):
-        test2.Sundering_Blades_upgarde(test)
-    if isinstance(test,Kodo_Beast):
-        test.War_Drums_upgrade()
-    if isinstance(test2,Kodo_Beast):
-        test2.War_Drums_upgrade()
-    test.calculate_damage_reduction()
-    test2.calculate_damage_reduction()
-    t1 = threading.Thread(target=test.attack_unit, args=(test2,))
-    t2 = threading.Thread(target=test2.attack_unit, args=(test,))
-    t1.start()
-    t2.start()
-    t1.join()
-    t2.join()
-    if not test.is_alive():
-        print(f"{test2.name} has won with {test2.health} health.")
-    if not test2.is_alive():
-        print(f"{test.name} has won with {test.health} health.")
+    while True:
+        print("\nAvailable units:")
+        for key in units.keys():
+            print(f"- {key}")
+        
+        unit1_name = input("Choose the first unit (or 'quit' to exit): ").lower()
+        if unit1_name == 'quit':
+            break
+        
+        unit2_name = input("Choose the second unit (or 'quit' to exit): ").lower()
+        if unit2_name == 'quit':
+            break
+        
+        if unit1_name not in units or unit2_name not in units:
+            print("Invalid unit name(s). Please try again.")
+            continue
+        
+        unit1 = units[unit1_name]
+        unit2 = units[unit2_name]
+
+        unit1.upgrades()
+        unit2.upgrades()
+
+        if isinstance(unit1,Hybrid):
+         unit1.enemy_is_air_unit(unit2)
+        if isinstance(unit2,Hybrid):
+            unit2.enemy_is_air_unit(unit1)
+
+        if isinstance(unit1,Mortar_team):
+            unit1.Fragmentation_Shards_upgrade(unit2)
+        if isinstance(unit2,Mortar_team):
+            unit2.Fragmentation_Shards_upgrade(unit1)
+
+        unit1.update_damage_multiplier(unit2)
+        unit2.update_damage_multiplier(unit1)
+
+        if isinstance(unit1,Knight):
+            unit1.Sundering_Blades_upgarde(unit2)
+        if isinstance(unit2,Knight):
+            unit2.Sundering_Blades_upgarde(unit1)
+
+        if isinstance(unit1,Kodo_Beast):
+            unit1.War_Drums_upgrade()
+        if isinstance(unit2,Kodo_Beast):
+            unit2.War_Drums_upgrade()
+
+        unit1.calculate_damage_reduction()
+        unit2.calculate_damage_reduction()
+
+        t1 = threading.Thread(target=unit1.attack_unit, args=(unit2,))
+        t2 = threading.Thread(target=unit2.attack_unit, args=(unit1,))
+
+        t1.start()
+        t2.start()
+
+        t1.join()
+        t2.join()
+
+        if not unit1.is_alive():
+            print(f"{unit2.name} has won with {unit2.health} health.")
+        if not unit2.is_alive():
+            print(f"{unit1.name} has won with {unit1.health} health.")
 
 
-    print(f"{test.name} has {test.damage} damage, {test.damage_type} type, {test.dmgmult} multyplier, {test.attack_speed} speed, {test.dice_sides} dice sides.")
-    print(f"{test2.name} has {test2.damage} damage, {test2.damage_type} type, {test2.dmgmult} multyplier, {test2.attack_speed} speed, {test2.dice_sides} dice sides.")
-if __name__=="__main__":
+        print(f"{unit1.name} has {unit1.damage} damage, {unit1.damage_type} type, {unit1.dmgmult} multyplier, {unit1.attack_speed} speed, {unit1.dice_rolls} dice rolls, {unit1.armor} armor.")
+        print(f"{unit2.name} has {unit2.damage} damage, {unit2.damage_type} type, {unit2.dmgmult} multyplier, {unit2.attack_speed} speed, {unit2.dice_rolls} dice rolls, {unit2.armor} armor.")
+
+        play_again = input("Do you want to play again? (yes/no): ").lower()
+        if play_again != 'yes':
+            break
+
+    print("Thanks for playing!")
+
+if __name__ == "__main__":
     main()

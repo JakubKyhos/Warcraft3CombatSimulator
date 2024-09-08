@@ -1,6 +1,7 @@
-<h1>About:</h1>
+<h1>This project was created as a personal project for boot.dev</h1>
+<h2>About:</h2>
 <p>Warcraft3CombatSimulator lets you take two units from base races (Human, Orc, Undead, Night Elf) to fight each other.
-It allows for a quick check, whether a unit is good against the other and vice versa, without having to start a match against the other player or CPU.</p>
+It allows for a quick check, whether a unit is good against the other and vice versa, without having to start, a match against the other player or CPU. Sadly the program doesn't include heroes and towers. I've spent a lot of time on it/procrastinating and I would like to move on with the course.</p>
 
 <h2>Requirements:</h2>
 
@@ -21,7 +22,7 @@ type in the first unit you want or type quit to exit and press enter.
 repeat for the second unit.
 Depending on the units you chose you will be asked to select their upgrades.
 If it`s [y/n] type y or n and hit enter.
-If its something like basic, advanced or expert, type one of those choices and press enter. Or hit enter if you don't want any.
+If it`s something like basic, advanced or expert, type one of those choices and press enter. Or hit enter if you don't want any.
 repeat for the second unit if needed</p>
 
 <p>Now the program starts printing out how much damage each unit does and how much health, the enemy is left with.

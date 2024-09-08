@@ -79,10 +79,6 @@ def main():
     if not unit1.can_attack_unit(unit2) and not unit2.can_attack_unit(unit1):
         print("Units cannot fight eachother.")
 
-
-    print(f"{unit1.name} has {unit1.damage} damage, {unit1.damage_type} type, {unit1.dmgmult} multyplier, {unit1.attack_speed} speed, {unit1.dice_rolls} dice rolls, {unit1.armor} armor.")
-    print(f"{unit2.name} has {unit2.damage} damage, {unit2.damage_type} type, {unit2.dmgmult} multyplier, {unit2.attack_speed} speed, {unit2.dice_rolls} dice rolls, {unit2.armor} armor.")
-
     print("Thanks for playing!")
 
 if __name__ == "__main__":

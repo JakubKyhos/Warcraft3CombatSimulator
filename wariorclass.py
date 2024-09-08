@@ -1,6 +1,6 @@
 from unitclass import Unit
 
-class Warior(Unit):
+class Warrior(Unit):
     def __init__(self, name, health, damage, damage_type, armor, armor_type, attack_speed, dice_rolls, dice_sides, unit_type, valid_targets):
         super().__init__(name, health, damage, damage_type, armor, armor_type, attack_speed, dice_rolls, dice_sides, unit_type, valid_targets)
         self.weapon_upgrade = ""
@@ -51,7 +51,14 @@ class Warior(Unit):
         self.armor_update()
         self.get_dice_rolls()
 
-class Mortar_team(Warior):
+class Siege(Warrior):
+    def __init__(self, name, health, damage, damage_type, armor, armor_type, attack_speed, dice_rolls, dice_sides, unit_type, valid_targets):
+        super().__init__(name, health, damage, damage_type, armor, armor_type, attack_speed, dice_rolls, dice_sides, unit_type, valid_targets)
+
+    def upgrades(self):
+        self.get_dice_rolls()
+
+class Mortar_team(Warrior):
     def __init__(self, name, health, damage, damage_type, armor, armor_type, attack_speed, dice_rolls, dice_sides, unit_type, valid_targets):
         super().__init__(name, health, damage, damage_type, armor, armor_type, attack_speed, dice_rolls, dice_sides, unit_type, valid_targets)
 
@@ -66,7 +73,7 @@ class Mortar_team(Warior):
             print("Invalid input for Fragmentation Shards upgrade. Choose from: [y/n].")
             self.Fragmentation_Shards_upgrade(target)
 
-class Dragonhawk_Rider(Warior):
+class Dragonhawk_Rider(Warrior):
     def __init__(self, name, health, damage, damage_type, armor, armor_type, attack_speed, dice_rolls, dice_sides, unit_type, valid_targets):
         super().__init__(name, health, damage, damage_type, armor, armor_type, attack_speed, dice_rolls, dice_sides, unit_type, valid_targets)
 
@@ -75,7 +82,7 @@ class Dragonhawk_Rider(Warior):
         self.get_dice_rolls()
         self.Animal_War_Training_upgrade()
 
-class Knight(Warior):
+class Knight(Warrior):
     def __init__(self, name, health, damage, damage_type, armor, armor_type, attack_speed, dice_rolls, dice_sides, unit_type, valid_targets):
         super().__init__(name, health, damage, damage_type, armor, armor_type, attack_speed, dice_rolls, dice_sides, unit_type, valid_targets)
 
@@ -95,7 +102,7 @@ class Knight(Warior):
         self.get_dice_rolls()
         self.Animal_War_Training_upgrade()
 
-class Grunt(Warior):
+class Grunt(Warrior):
     def __init__(self, name, health, damage, damage_type, armor, armor_type, attack_speed, dice_rolls, dice_sides, unit_type, valid_targets):
         super().__init__(name, health, damage, damage_type, armor, armor_type, attack_speed, dice_rolls, dice_sides, unit_type, valid_targets)
 
@@ -116,7 +123,7 @@ class Grunt(Warior):
         self.get_dice_rolls()
         self.Brute_Strength_upgrade()
 
-class Archer(Warior):
+class Archer(Warrior):
     def __init__(self, name, health, damage, damage_type, armor, armor_type, attack_speed, dice_rolls, dice_sides, unit_type, valid_targets):
         super().__init__(name, health, damage, damage_type, armor, armor_type, attack_speed, dice_rolls, dice_sides, unit_type, valid_targets)
 
@@ -136,7 +143,7 @@ class Archer(Warior):
         self.get_dice_rolls()
         self.Marksmanship_upgrade()
 
-class Ghoul(Warior):
+class Ghoul(Warrior):
     def __init__(self, name, health, damage, damage_type, armor, armor_type, attack_speed, dice_rolls, dice_sides, unit_type, valid_targets):
         super().__init__(name, health, damage, damage_type, armor, armor_type, attack_speed, dice_rolls, dice_sides, unit_type, valid_targets)
 
@@ -155,3 +162,62 @@ class Ghoul(Warior):
         self.armor_update()
         self.get_dice_rolls()
         self.Ghoul_Frenzy_upgrade()
+
+class Mountain_Giant(Warrior):
+    def __init__(self, name, health, damage, damage_type, armor, armor_type, attack_speed, dice_rolls, dice_sides, unit_type, valid_targets):
+        super().__init__(name, health, damage, damage_type, armor, armor_type, attack_speed, dice_rolls, dice_sides, unit_type, valid_targets)
+        self.stone_skin = False
+
+    def upgrades(self):
+        self.armor_update()
+        self.get_dice_rolls()
+        self.War_Club()
+        self.Hardened_Skin_upgrade()
+
+    def War_Club(self):
+        upgrade = input(f"Do you want {self.name} to use War Club? [y/n] --> ")
+
+        if upgrade == "y":
+            self.damage_type = "siege"
+        elif upgrade == "n":
+            return
+        else:
+            print("Invalid input for War Club. Choose from: [y/n].")
+            self.War_Club()
+
+    def Hardened_Skin_upgrade(self):
+        upgrade = input(f"Do you want {self.name} to have Hardened Skin? [y/n] --> ")
+
+        if upgrade == "y":
+            self.stone_skin = True
+        elif upgrade == "n":
+            return
+        else:
+            print("Invalid input for Hardened Skin. Choose from: [y/n].")
+            self.Hardened_Skin_upgrade()
+
+    def Hardened_Skin(self, total_damage):
+        if self.stone_skin:
+            total_damage -= 8
+            return 3 if total_damage < 3 else total_damage
+        return total_damage
+
+class Crypt_Fiend(Warrior):
+    def __init__(self, name, health, damage, damage_type, armor, armor_type, attack_speed, dice_rolls, dice_sides, unit_type, valid_targets):
+        super().__init__(name, health, damage, damage_type, armor, armor_type, attack_speed, dice_rolls, dice_sides, unit_type, valid_targets)
+
+    def Web_upgrade(self):
+        upgrade = input(f"Do you want Web upgrade for {self.name}? [y/n] --> ")
+
+        if upgrade == "y":
+            self.valid_targets.append("air")
+        elif upgrade == "n":
+            return
+        else:
+            print("Invalid input for Web upgrade. Choose from: [y/n].")
+            self.Web_upgrade()
+
+    def upgrades(self):
+        self.armor_update()
+        self.get_dice_rolls()
+        self.Web_upgrade()

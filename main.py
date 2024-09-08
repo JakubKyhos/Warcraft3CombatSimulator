@@ -4,12 +4,12 @@ import os
 from unitclass import Kodo_Beast
 from hybridclass import Hybrid
 from wariorclass import Mortar_team, Knight
-from unitsdatabase import units, units2
+from unitsdatabase import units1, units2
 
 
 def main():
     print("\nAvailable units:")
-    for key in units.keys():
+    for key in units1.keys():
         print(f"- {key}")
         
     unit1_name = input("Choose the first unit (or 'quit' to exit): ").lower()
@@ -20,20 +20,21 @@ def main():
     if unit2_name == 'quit':
         sys.exit("You chose to quit.")
         
-    if unit1_name not in units or unit2_name not in units2:
+    if unit1_name not in units1 or unit2_name not in units2:
         print("Invalid unit name(s). Please try again.")
         main()
         
-    unit1 = units[unit1_name]
+    unit1 = units1[unit1_name]
     unit2 = units2[unit2_name]
     os.system("clear")
-    unit1.upgrades()
-    unit2.upgrades()
 
     if isinstance(unit1,Hybrid):
         unit1.enemy_is_air_unit(unit2)
     if isinstance(unit2,Hybrid):
         unit2.enemy_is_air_unit(unit1)
+
+    unit1.upgrades()
+    unit2.upgrades()
 
     if isinstance(unit1,Mortar_team):
         unit1.Fragmentation_Shards_upgrade(unit2)
@@ -75,6 +76,8 @@ def main():
             print(f"{unit2.name} has won with {unit2.health} health.")
     if not unit2.is_alive():
         print(f"{unit1.name} has won with {unit1.health} health.")
+    if not unit1.can_attack_unit(unit2) and not unit2.can_attack_unit(unit1):
+        print("Units cannot fight eachother.")
 
 
     print(f"{unit1.name} has {unit1.damage} damage, {unit1.damage_type} type, {unit1.dmgmult} multyplier, {unit1.attack_speed} speed, {unit1.dice_rolls} dice rolls, {unit1.armor} armor.")
